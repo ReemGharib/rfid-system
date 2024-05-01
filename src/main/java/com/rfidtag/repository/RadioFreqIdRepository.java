@@ -33,7 +33,7 @@ public interface RadioFreqIdRepository extends JpaRepository<RFIDTag, Long> {
     Optional<RFIDTag> findById(Long id);
 
     /**
-     * Find RFID by tag id and epc
+     * Find RFID by tag id or epc
      *
      * @param tagId the tag id
      * @return Optional class of RFIDTag
@@ -48,8 +48,7 @@ public interface RadioFreqIdRepository extends JpaRepository<RFIDTag, Long> {
     default void checkRFIDExistsByTagIdOrEpc(String tagId, String epc) {
 
         if (!CollectionUtils.isEmpty(findByTagIdOrEpc(tagId, epc))) {
-            throw new RadioFreqIdAlreadyExistException(String.format("RFID Tag already exists",
-                    tagId, epc));
+            throw new RadioFreqIdAlreadyExistException("RFID Tag already exists");
         }
     }
 
