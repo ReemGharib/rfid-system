@@ -20,6 +20,7 @@ import java.util.List;
 import java.util.Optional;
 
 import static org.junit.jupiter.api.Assertions.assertThrows;
+import static org.mockito.Mockito.*;
 
 /**
  * Radio frequency identification service Integration Tests
@@ -127,21 +128,17 @@ public class RadioFreqIdServiceIntegrationTest {
     }
 
     @Test
-    public void testUpdateRadioFreqID_sameEPC_throwAlreadyExistException() {
-
-        RFIDTagDto rfidDto = RFIDTagDto.builder()
-                .siteName("Warehouse C")
-                .epc("EPC123456789")
-                .build();
-
-        RadioFreqIdAlreadyExistException exception = assertThrows(RadioFreqIdAlreadyExistException.class,
-                () -> this.radioFreqIdService.updateRadioFreqID("1", rfidDto));
-
-        Assertions.assertEquals("RFID Tag already exists", exception.getMessage()); // Same EPC
-    }
-
-    @Test
     public void testUpdateRadioFreqID_sameTagId_throwAlreadyExistException() {
+
+        this.radioFreqIdRepository.save(RFIDTag.builder()
+                .id(2L)
+                .siteName("Warehouse A")
+                .epc("EPC33")
+                .tagId("TAG987654321")
+                .location("Shelf 111, Aisle 2")
+                .rssi("-601dBm")
+                .date(LocalDate.now())
+                .build());
 
         RFIDTagDto rfidDto = RFIDTagDto.builder()
                 .siteName("Warehouse C")
@@ -151,7 +148,31 @@ public class RadioFreqIdServiceIntegrationTest {
         RadioFreqIdAlreadyExistException exception = assertThrows(RadioFreqIdAlreadyExistException.class,
                 () -> this.radioFreqIdService.updateRadioFreqID("1", rfidDto));
 
-        Assertions.assertEquals("RFID Tag already exists", exception.getMessage()); // Same EPC
+        Assertions.assertEquals("RFID tag already exist! with same tagId", exception.getMessage()); // Same EPC
+    }
+
+    @Test
+    public void testUpdateRadioFreqID_sameEPC_throwAlreadyExistException() {
+
+        this.radioFreqIdRepository.save(RFIDTag.builder()
+                .id(2L)
+                .siteName("Warehouse A")
+                .epc("EPC33")
+                .tagId("TAG987654321")
+                .location("Shelf 111, Aisle 2")
+                .rssi("-601dBm")
+                .date(LocalDate.now())
+                .build());
+
+        RFIDTagDto rfidDto = RFIDTagDto.builder()
+                .siteName("Warehouse C")
+                .epc("EPC33")
+                .build();
+
+        RadioFreqIdAlreadyExistException exception = assertThrows(RadioFreqIdAlreadyExistException.class,
+                () -> this.radioFreqIdService.updateRadioFreqID("1", rfidDto));
+
+        Assertions.assertEquals("RFID tag already exist! with same EPC", exception.getMessage()); // Same EPC
     }
 
     @Test

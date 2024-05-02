@@ -1,6 +1,7 @@
 package com.rfidtag.service.impl;
 
 import com.rfidtag.dtos.RFIDTagDto;
+import com.rfidtag.exception.RadioFreqIdAlreadyExistException;
 import com.rfidtag.exception.RadioFreqIdDeleteException;
 import com.rfidtag.exception.RadioFreqIdNotFoundException;
 import com.rfidtag.exception.RadioFreqIdPersistException;
@@ -71,7 +72,7 @@ public class RadioFreqIdServiceImpl implements RadioFreqIdService {
             this.radioFreqIDRepository.save(rfid);
         } catch (Exception e) {
 
-            log.error("Unable to save RFID tag {} ", rfidTagDto.getId());
+            log.error("Unable to save RFID tag {} -- ERROR {}", rfidTagDto.getId(), e.getMessage());
             throw new RadioFreqIdPersistException(format("Unable to persist RFID tag of id [%s]", rfidTagDto.getId()));
         }
 
@@ -87,15 +88,36 @@ public class RadioFreqIdServiceImpl implements RadioFreqIdService {
         RFIDTag rfidTag = this.radioFreqIDRepository.findById(Long.valueOf(id)).orElseThrow(() ->
                 new RadioFreqIdNotFoundException("RFID tag not found!"));
 
-        // Check if RFIDTag already exists
-        this.radioFreqIDRepository.checkRFIDExistsByTagIdOrEpc(rfidTagDto.getTagId(), rfidTagDto.getEpc());
+        // Check if RFIDTag already exists with same EPC
+        if (rfidTagDto.getEpc() != null)
+            this.radioFreqIDRepository.findByEpcEqualsAndIdIsNot(rfidTagDto.getEpc(), Long.valueOf(id)).ifPresent(
+                    rfidTag1 -> {
+                        throw new RadioFreqIdAlreadyExistException("RFID tag already exist! with same EPC");
+                    });
 
-        rfidTag.setSiteName(rfidTagDto.getSiteName());
-        rfidTag.setEpc(rfidTagDto.getEpc());
-        rfidTag.setTagId(rfidTagDto.getTagId());
-        rfidTag.setLocation(rfidTagDto.getLocation());
-        rfidTag.setRssi(rfidTagDto.getRssi());
-        rfidTag.setDate(rfidTagDto.getDate());
+        // Check if RFIDTag already exists with same tagId
+        if (rfidTagDto.getTagId() != null)
+            this.radioFreqIDRepository.findByTagIdEqualsAndIdIsNot(rfidTagDto.getTagId(), Long.valueOf(id)).ifPresent(
+                    rfidTag1 -> {
+                        throw new RadioFreqIdAlreadyExistException("RFID tag already exist! with same tagId");
+                    });
+
+        if (rfidTagDto.getSiteName() != null)
+            rfidTag.setSiteName(rfidTagDto.getSiteName());
+
+        if (rfidTagDto.getEpc() != null)
+            rfidTag.setEpc(rfidTagDto.getEpc());
+
+        if (rfidTagDto.getTagId() != null)
+            rfidTag.setTagId(rfidTagDto.getTagId());
+
+        if (rfidTagDto.getLocation() != null)
+            rfidTag.setLocation(rfidTagDto.getLocation());
+
+        if (rfidTagDto.getRssi() != null)
+            rfidTag.setRssi(rfidTagDto.getRssi());
+
+        rfidTag.setDate(rfidTagDto.getDate()); // updated/created date -- as per requirement
 
         try {
             this.radioFreqIDRepository.save(rfidTag);
@@ -106,7 +128,7 @@ public class RadioFreqIdServiceImpl implements RadioFreqIdService {
         }
 
         log.info("RFID tag successfully updated !");
-        return rfidTagDto;
+        return this.radioFreqIdSupport.populateRFIDTagDto(rfidTag);
     }
 
     @Override

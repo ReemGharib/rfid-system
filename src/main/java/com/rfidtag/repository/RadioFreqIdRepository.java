@@ -40,6 +40,9 @@ public interface RadioFreqIdRepository extends JpaRepository<RFIDTag, Long> {
      */
     List<RFIDTag> findByTagIdOrEpc(String tagId, String epc);
 
+    Optional<RFIDTag> findByEpcEqualsAndIdIsNot(String epc, Long id);
+    Optional<RFIDTag> findByTagIdEqualsAndIdIsNot(String tagId, Long id);
+
     /**
      * Check if RFID Tag already exists by tagId
      *

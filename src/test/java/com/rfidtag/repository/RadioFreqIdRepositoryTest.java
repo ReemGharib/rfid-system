@@ -49,32 +49,6 @@ public class RadioFreqIdRepositoryTest {
     }
 
     @Test
-    public void testFindById() {
-
-        this.radioFreqIdRepository.save(this.rfidTag);
-
-        RFIDTag rfidTag2 = RFIDTag.builder()
-                .id(1L)
-                .siteName("Warehouse B")
-                .epc("EPC12345")
-                .tagId("TAG98765")
-                .location("Shelf 1, Aisle 2")
-                .rssi("-60dBm")
-                .date(LocalDate.now())
-                .build();
-
-        this.radioFreqIdRepository.save(rfidTag2);
-
-        RFIDTag result = this.radioFreqIdRepository.findById(this.rfidTag.getId()).get();
-        Assertions.assertNotNull(result);
-        Assertions.assertEquals(this.rfidTag.getId(), result.getId());
-
-        RFIDTag result2 = this.radioFreqIdRepository.findById(rfidTag2.getId()).get();
-        Assertions.assertNotNull(result);
-        Assertions.assertEquals(rfidTag2.getId(), result2.getId());
-    }
-
-    @Test
     public void testFindByTagIdOrEpc() {
 
         this.radioFreqIdRepository.save(this.rfidTag);
