@@ -37,4 +37,6 @@ Explore and test the API endpoints using Swagger UI:
 * API Docs: http://localhost:8080/rfid-tag-api/api-docs
 
 
+## AWS Service
 
+![img.png](img.png)
