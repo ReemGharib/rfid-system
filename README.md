@@ -24,7 +24,7 @@ To run this API locally, follow these steps:
 
 ## Endpoints (on AWS)
 
-1. Fetch RFID Tags: GET http://rfid-16860863.eu-west-1.elb.amazonaws.com:8080/rfid-tag-api/
+1. Fetch RFID Tags: GET http://rfid-16860863.eu-west-1.elb.amazonaws.com:8080/rfid-tag-api/radio-freq-identification
 2. Create new RFID Tag: POST http://rfid-16860863.eu-west-1.elb.amazonaws.com:8080/rfid-tag-api/radio-freq-identification
 3. Update existing RFID Tag: PUT http://rfid-16860863.eu-west-1.elb.amazonaws.com:8080/rfid-tag-api/radio-freq-identification/{id}
 4. Delete existing RFID Tag: DELETE http://rfid-16860863.eu-west-1.elb.amazonaws.com:8080/rfid-tag-api/radio-freq-identification/{id}
