@@ -46,7 +46,7 @@ Explore and test the API endpoints using Swagger UI:
   1. Check the version of the installed docker: docker --version.
   2. Connect to Docker Desktop: docker login
   3. Build image: docker build -t rfid-ecr-repo .
-  4. Go to Docker Desktop, and create container
+  4. Go to Docker Desktop, and create container (and add environment variables)
   4. Run the container from the created image, run on cmd : docker run -d -p 8080:8080 --name <container-name> dockerfile
   5. Call our endpoints to check everything is working fine before you start deployment.
 
