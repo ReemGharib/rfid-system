@@ -36,6 +36,20 @@ Explore and test the API endpoints using Swagger UI:
 * Swagger UI : http://localhost:8080/rfid-tag-api/swagger-ui.html
 * API Docs: http://localhost:8080/rfid-tag-api/api-docs
 
+## Steps to dockerize rfid-tag API:"
+
+* Create a file named Dockerfile and implement it.
+* Run: maven clean package
+* Install Docker Desktop
+* Run the following Docker commands:
+
+  1. Check the version of the installed docker: docker --version.
+  2. Connect to Docker Desktop: docker login
+  3. Build image: docker build -t rfid-ecr-repo .
+  4. Go to Docker Desktop, and create container
+  4. Run the container from the created image, run on cmd : docker run -d -p 8080:8080 --name <container-name> dockerfile
+  5. Call our endpoints to check everything is working fine before you start deployment.
+
 
 ## AWS Services
 
