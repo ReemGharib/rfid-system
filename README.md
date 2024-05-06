@@ -50,6 +50,15 @@ Explore and test the API endpoints using Swagger UI:
   4. Run the container from the created image, run on cmd : docker run -d -p 8080:8080 --name <container-name> dockerfile
   5. Call our endpoints to check everything is working fine before you start deployment.
 
+## Steps to push the created image to ECR (Elastic Container Registry):
+
+* Login to AWS, navigate to ECR Repositories
+* Create repository 
+* Run the following commands on cmd:
+  * (Get-ECRLoginCommand).Password | docker login --username AWS --password-stdin <aws-account-id>.dkr.ecr.<region>.amazonaws.com
+  * Tag your image:  docker tag <repo-name>:latest <aws-account-id>.dkr.ecr.<region>.amazonaws.com/<repo-name>:latest
+  * docker push <aws-account-id>.dkr.ecr.<region>.amazonaws.com/<repo-name>:latest
+
 
 ## AWS Services
 
