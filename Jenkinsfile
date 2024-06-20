@@ -18,7 +18,7 @@ pipeline {
     stages {
         stage('Checkout Code') {
             steps {
-                git branch: ${params.GIT_BRANCH}, url: 'https://github.com/ReemGharib/rfid-system/'
+                git branch: "${params.GIT_BRANCH}", url: 'https://github.com/ReemGharib/rfid-system/'
             }
         }
 
