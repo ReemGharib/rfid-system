@@ -22,9 +22,21 @@ pipeline {
             }
         }
 
-        stage('Build Spring Boot Application') {
+        stage('Build') {
             steps {
                 bat 'mvn clean package'
+            }
+        }
+
+        stage('deploy-dev') {
+            steps {
+
+            }
+        }
+
+        stage('deploy-prod') {
+            steps {
+
             }
         }
     }
